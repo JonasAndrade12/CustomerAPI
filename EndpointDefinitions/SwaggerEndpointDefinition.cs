@@ -1,3 +1,5 @@
+namespace CustomerAPI.EndpointDefinitions;
+
 public class SwaggerEndpointDefinition : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)

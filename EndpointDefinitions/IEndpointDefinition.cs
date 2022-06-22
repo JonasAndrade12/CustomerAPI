@@ -1,3 +1,5 @@
+namespace CustomerAPI.EndpointDefinitions;
+
 public interface IEndpointDefinition
 {
     void DefineServices(IServiceCollection services);

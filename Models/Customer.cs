@@ -1,3 +1,5 @@
+namespace CustomerAPI.Models;
+
 public class Customer
 {
     public Guid Id { get; init; } = Guid.NewGuid();
