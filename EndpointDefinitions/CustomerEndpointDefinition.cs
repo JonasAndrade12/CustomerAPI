@@ -14,7 +14,7 @@ public class CustomerEndpointDefinition : IEndpointDefinition
         app.MapDelete("/v1/customers/{id}", DeleteCustomerById);
     }
 
-    internal List<Customer> GetAllCustomers(ICustomerService service)
+    internal static List<Customer> GetAllCustomers(ICustomerService service)
     {
         return service.GetAll();
     }
