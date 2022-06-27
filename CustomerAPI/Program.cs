@@ -16,9 +16,4 @@ app.UseEndpointDefinitions();
 
 app.UseHttpsRedirection();
 
-app.MapGet("/hello", async (DBContext contexto) =>
-{
-   await contexto.Customers.ToListAsync();
-});
-
 app.Run();

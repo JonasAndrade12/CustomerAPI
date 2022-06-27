@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 public class CustomerService : ICustomerService
 {
     private readonly Dictionary<Guid, Customer> _customers = new();
-    private DBContext db;
+    private readonly DBContext db;
 
     public CustomerService(IDbContextFactory<DBContext> _dbContext)
     {
@@ -21,31 +21,45 @@ public class CustomerService : ICustomerService
         }
 
         db.Customers.Add(customer);
+        db.SaveChanges();
     }
 
-    public Customer? GetById(Guid id)
+    public async Task<Customer?> GetByIdAsync(Guid id)
     {
-        return _customers.GetValueOrDefault(id);
+        return await db.Customers.Where(x => x.Id == id).SingleOrDefaultAsync();
     }
 
-    public List<Customer> GetAll()
+    public async Task<List<Customer>> GetAllAsync()
     {
-        return db.Customers.ToList();
+        return await db.Customers.ToListAsync();
     }
 
-    public void Update(Customer customer)
+    public async void UpdateAsync(Customer customer)
     {
-        var existingCustomer = GetById(customer.Id);
+        var existingCustomer = await GetByIdAsync(customer.Id);
         if (existingCustomer is null)
         {
             return;
         }
 
-        _customers[customer.Id] = customer;
+        // TODO: Create extension
+        existingCustomer.FirstName = customer.FirstName;
+        existingCustomer.Surname = customer.Surname;
+        existingCustomer.Email = customer.Email;
+        existingCustomer.Password = customer.Password;
+
+        db.SaveChanges();
     }
 
-    public void Delete(Guid id)
+    public async void DeleteAsync(Guid id)
     {
-        _customers.Remove(id);
+        var existingCustomer = await GetByIdAsync(id);
+        if (existingCustomer is null)
+        {
+            return;
+        }
+
+        db.Customers.Remove(existingCustomer);
+        db.SaveChanges();
     }
 }

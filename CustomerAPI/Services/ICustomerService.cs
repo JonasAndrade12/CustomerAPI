@@ -6,11 +6,11 @@ public interface ICustomerService
 {
     void Create(Customer customer);
 
-    Customer? GetById(Guid id);
+    Task<Customer?> GetByIdAsync(Guid id);
 
-    List<Customer> GetAll();
+    Task<List<Customer>> GetAllAsync();
 
-    void Update(Customer customer);
+    void UpdateAsync(Customer customer);
 
-    void Delete(Guid id);
+    void DeleteAsync(Guid id);
 }

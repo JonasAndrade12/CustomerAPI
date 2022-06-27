@@ -7,21 +7,21 @@ public class CustomerEndpointDefinition : IEndpointDefinition
 {
     public void DefineEndpoints(WebApplication app)
     {
-        app.MapGet("/v1/customers", GetAllCustomers);
-        app.MapGet("/v1/customers/{id}", GetCustomerById);
+        app.MapGet("/v1/customers", GetAllCustomersAsync);
+        app.MapGet("/v1/customers/{id}", GetCustomerByIdAsync);
         app.MapPost("/v1/customers", CreateCustomer);
-        app.MapPut("/v1/customers/{id}", UpdateCustomer);
+        app.MapPut("/v1/customers/{id}", UpdateCustomerAsync);
         app.MapDelete("/v1/customers/{id}", DeleteCustomerById);
     }
 
-    internal static List<Customer> GetAllCustomers(ICustomerService service)
+    internal async static Task<List<Customer>> GetAllCustomersAsync(ICustomerService service)
     {
-        return service.GetAll();
+        return await service.GetAllAsync();
     }
 
-    internal IResult GetCustomerById(ICustomerService service, Guid id)
+    internal async Task<IResult> GetCustomerByIdAsync(ICustomerService service, Guid id)
     {
-        var customer = service.GetById(id);
+        var customer = await service.GetByIdAsync(id);
         return customer is not null ? Results.Ok(customer) : Results.NotFound();
     }
 
@@ -31,21 +31,21 @@ public class CustomerEndpointDefinition : IEndpointDefinition
         return Results.Created($"/v1/customers/{customer.Id}", customer);
     }
 
-    internal IResult UpdateCustomer(ICustomerService service, Guid id, Customer updatedCustomer)
+    internal async Task<IResult> UpdateCustomerAsync(ICustomerService service, Guid id, Customer updatedCustomer)
     {
-        var customer = service.GetById(id);
+        var customer = await service.GetByIdAsync(id);
         if (customer is null)
         {
             return Results.NotFound();
         }
 
-        service.Update(updatedCustomer);
+        service.UpdateAsync(updatedCustomer);
         return Results.Ok(updatedCustomer);
     }
 
     internal IResult DeleteCustomerById(ICustomerService service, Guid id)
     {
-        service.Delete(id);
+        service.DeleteAsync(id);
         return Results.Ok();
     }
 
