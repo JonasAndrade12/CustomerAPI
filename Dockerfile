@@ -2,11 +2,14 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as build
 WORKDIR /app
 
 # Copy everything
-COPY . .
+COPY ./CustomerAPI/ ./CustomerAPI/
+COPY ./CustomerAPI.Tests/ ./CustomerAPI.Tests/
+
 # Restore as distinct layers
-RUN dotnet restore
+RUN dotnet restore ./CustomerAPI/CustomerAPI.sln
+
 # Build and publish a release
-RUN dotnet publish -o /app/published-app
+RUN dotnet publish ./CustomerAPI/CustomerAPI.sln -o /app/published-app
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine as runtime
