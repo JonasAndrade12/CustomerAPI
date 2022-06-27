@@ -9,7 +9,7 @@ COPY ./CustomerAPI.Tests/ ./CustomerAPI.Tests/
 RUN dotnet restore ./CustomerAPI/CustomerAPI.sln
 
 # Build and publish a release
-RUN dotnet publish ./CustomerAPI/CustomerAPI.sln -o /app/published-app
+RUN dotnet publish ./CustomerAPI/CustomerAPI.sln -c Debug -o /app/published-app
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine as runtime
